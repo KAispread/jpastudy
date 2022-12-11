@@ -3,23 +3,18 @@ package com.example.jpaProgramming.domain;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "MEMBER")
 public class Member {
     @Id
-    @Column(name = "ID")
+    @Column
     private String id;
 
     @Column(name = "NAME")
     private String username;
 
     private Integer age;
-
 }
