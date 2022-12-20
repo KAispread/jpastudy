@@ -1,5 +1,6 @@
-package com.example.jpaProgramming.domain;
+package com.example.jpaProgramming.domain.item;
 
+import com.example.jpaProgramming.domain.CategoryItem;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,8 @@ import java.util.List;
 
 @Setter
 @Getter
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn
 @Entity
 public class Item {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

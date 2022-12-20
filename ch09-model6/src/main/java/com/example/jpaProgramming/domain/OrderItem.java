@@ -1,5 +1,6 @@
 package com.example.jpaProgramming.domain;
 
+import com.example.jpaProgramming.domain.item.Item;
 import lombok.Getter;
 import lombok.Setter;
 
