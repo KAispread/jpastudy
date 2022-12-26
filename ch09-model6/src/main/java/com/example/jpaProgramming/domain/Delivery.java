@@ -1,7 +1,10 @@
 package com.example.jpaProgramming.domain;
 
+import lombok.Getter;
+
 import javax.persistence.*;
 
+@Getter
 @Entity
 public class Delivery {
     @Id @GeneratedValue
@@ -11,9 +14,8 @@ public class Delivery {
     @OneToOne(mappedBy = "delivery")
     private Order order;
 
-    private String city;
-    private String zipcode;
-    private String street;
+    @Embedded
+    private Address address;
 
     @Enumerated(EnumType.STRING)
     private DeliveryStatus status;
