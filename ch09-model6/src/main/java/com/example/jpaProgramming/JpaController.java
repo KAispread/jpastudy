@@ -105,7 +105,23 @@ public class JpaController {
         // CONCAT, SUBSTRING, LOWER, TRIM, LENGTH 등
         em.createQuery("select CONCAT(m.username, m.createdDate) from Member m");
 
-        // 수학함수
+        // CASE 식
+        em.createQuery("select case when o.amount <= 1000 then '일반 요금' when o.amount > 5000 then '프리미엄' else '일반요금'" +
+                "end from Order o");
+        em.createQuery("select " +
+                "case o.amount " +
+                    "when 1000 then '일반 요금' " +
+                    "when 5000 then '프리미엄' " +
+                "else '일반요금'" +
+                "end from Order o");
+
+        // TREAT -> 자식 타입으로 다루기
+        em.createQuery("select i from Item i where treat(i as Book).author = 'kim'");
+
+        // NamedQuery 사용 (정적 쿼리)
+        em.createNamedQuery("Member.findByUsername", Member.class)
+                .setParameter("username", "회원1")
+                .getResultList();
 
         return "OK";
     }
