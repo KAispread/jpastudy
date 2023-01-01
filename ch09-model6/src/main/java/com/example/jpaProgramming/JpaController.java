@@ -1,7 +1,9 @@
 package com.example.jpaProgramming;
 
 import com.example.jpaProgramming.domain.Member;
+import com.example.jpaProgramming.domain.QMember;
 import com.example.jpaProgramming.example.UserDTO;
+import com.querydsl.jpa.impl.JPAQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +13,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
+
+import static com.example.jpaProgramming.domain.QMember.member;
 
 @RequiredArgsConstructor
 @RestController
@@ -140,5 +144,15 @@ public class JpaController {
         EntityManager em = emf.createEntityManager();
         String sql = "SELECT ID, AGE, TEAM_ID, NAME FROM MEMBER WHERE NAME = 'kim'";
         List resultList = em.createNativeQuery(sql, Member.class).getResultList();
+    }
+
+    private void queryDSL() {
+        EntityManager em = emf.createEntityManager();
+
+        JPAQuery<Member> query = new JPAQuery<>(em);
+        List<Member> members = query.from(member)
+                .where(member.username.eq("회원1"))
+                .orderBy(member.username.desc())
+                .fetch();
     }
 }
