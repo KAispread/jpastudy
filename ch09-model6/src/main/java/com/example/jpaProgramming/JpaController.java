@@ -2,13 +2,21 @@ package com.example.jpaProgramming;
 
 import com.example.jpaProgramming.domain.Member;
 import com.example.jpaProgramming.domain.QMember;
+import com.example.jpaProgramming.domain.QOrder;
+import com.example.jpaProgramming.domain.QOrderItem;
+import com.example.jpaProgramming.domain.item.Item;
+import com.example.jpaProgramming.domain.item.QItem;
 import com.example.jpaProgramming.example.UserDTO;
+import com.mysema.query.jpa.JPASubQuery;
 import com.querydsl.jpa.impl.JPAQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -154,5 +162,52 @@ public class JpaController {
                 .where(member.username.eq("회원1"))
                 .orderBy(member.username.desc())
                 .fetch();
+
+        // 검색 조건 쿼리
+        JPAQuery<Item> query1 = new JPAQuery<>(em);
+        QItem item = QItem.item;
+        List<Item> list1 = query1.from(item)
+                .where(item.name.eq("좋은상품")
+                        .and(item.price.gt(20000))
+                        .and(item.price.between(40000, 70000))
+                        .and(item.name.contains("상품1"))
+                        .and(item.name.startsWith("고급")))
+                .fetch();
+
+        // 페이징 & 정렬
+        List<Item> list2 = query1.from(item)
+                .where(item.price.gt(20000))
+                .orderBy(item.price.desc(), item.stockQuantity.asc())
+                .offset(10).limit(20)
+                .fetch();
+
+        // 그룹
+        query1.from(item)
+                .groupBy(item.price)
+                .having(item.price.gt(10000))
+                .fetch();
+
+        // 조인
+        QOrder order = QOrder.order;
+        QOrderItem orderItem = QOrderItem.orderItem;
+        query1.from(order)
+                .join(order.member, member)
+                .leftJoin(order.orderItems, orderItem)
+                .on(orderItem.count.gt(2))
+                .fetch();
+
+        // 페치조인
+        query1.from(order)
+                .join(order.member, member).fetchJoin()
+                .leftJoin(order.orderItems, orderItem).fetchJoin()
+                .on(orderItem.count.gt(2))
+                .fetch();
+
+        // 서브 쿼리
+        QItem itemSub = new QItem("itemSub");
+//        query1.from(item)
+//                .where(item.price.eq(
+//                        new JPASubQuery().from(item).unique(itemSub.price.max())
+//                )).fetch();
     }
 }
