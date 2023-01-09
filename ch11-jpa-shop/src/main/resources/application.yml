@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/jpashop
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        # show_sql: true
+        format_sql: true
+
+  session:
+    store-type: jdbc
+    jdbc:
+      initialize-schema: always
+
+  thymeleaf:
+    cache: false
+    check-template-location: true
+    prefix: /templates/
+    suffix: .html
+
+logging.level:
+  org.hibernate.SQL: debug
+# org.hibernate.type: trace
