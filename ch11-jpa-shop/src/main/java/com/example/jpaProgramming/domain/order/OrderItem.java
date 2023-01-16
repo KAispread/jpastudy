@@ -39,7 +39,39 @@ public class OrderItem {
         this.count = count;
     }
 
+    // 생성 메서드
+    public static OrderItem createOrderItem(Item item, int orderPrice, int count) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setItem(item);
+        orderItem.setOrderPrice(orderPrice);
+        orderItem.setCount(count);
+
+        item.removeStock(count);
+        return orderItem;
+    }
+
+    // 주문 취소
+    public void cancel() {
+        getItem().addStock(count);
+    }
+
+    // 주문상품 전체 가격 조회
+    public int getTotalPrice() {
+        return getOrderPrice() * getCount();
+    }
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    public void setOrderPrice(int orderPrice) {
+        this.orderPrice = orderPrice;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }
