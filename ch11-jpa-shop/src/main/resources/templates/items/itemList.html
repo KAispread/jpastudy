@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>로그인</title>
+    <meta name="theme-color" content="#7952b3">
+</head>
+
+<body class="text-center">
+<div class="container col-xl-10 col-xxl-8 px-4 py-5">
+    <div class="row align-items-center g-lg-5 py-5">
+        <div class="col-lg-7 text-center text-lg-start">
+            <!-- h1 로고 -->
+            <h1 class="logo_icon display-4 fw-bold lh-1 mb-3" style="font-family: 'Yellowtail', cursive;"
+                th:fragment="logo_h1">Modu Form</h1>
+            <p class="col-lg-10 fs-4 gowun-font-ko">ModuForm에 방문해주셔서 감사합니다. <br>
+                로그인 후 ModuForm의 모든 기능을 이용해보세요!<br>
+            </p>
+        </div>
+        <div class="col-md-10 mx-auto col-lg-5">
+            <form th:action="@{/app/users/logins (redirectURL=${param.redirectURL})}" method="post" th:object="${login}" class="p-4 p-md-5 border rounded-3 bg-light">
+                <div style="margin-bottom: 1rem" th:if="${#fields.hasGlobalErrors()}">
+                    <small th:each="error : ${#fields.globalErrors()}" th:text="${error}" class="filed-error-text"></small>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input th:field="*{userId}" th:errorclass="filed-error-box" type="text" class="form-control" id="userId" placeholder="ID">
+                    <label th:text="#{input.user.id}" for="userId">아이디</label>
+                    <div th:errors="*{userId}" class="filed-error-text">
+                    </div>
+                </div>
+                <div class="form-floating mb-3">
+                    <input th:field="*{password}" th:errorclass="filed-error-box" type="password" class="form-control" id="password" placeholder="Password">
+                    <label th:text="#{input.user.password}" for="password">비밀번호</label>
+                    <div th:errors="*{password}" class="filed-error-text">
+                    </div>
+                </div>
+                <div class="checkbox mb-3">
+                    <label>
+                        <input type="checkbox" value="remember-me"> Remember me
+                    </label>
+                </div>
+                <button th:text="#{button.user.login}" class="w-100 btn btn-lg btn-primary" type="submit">로그인</button>
+                <hr class="my-4">
+
+                <a th:href="@{/oauth2/authorization/google}" class="w-100 btn btn-lg btn-outline-primary" role="button">
+                    <div>
+                        <img style="margin-right: 0.5rem;" src="/css/image/google_icon.png" height="25" alt="icon">
+                        <th:block th:text="#{button.user.login.google}">
+                            Google Logins
+                        </th:block>
+                    </div>
+                </a>
+
+                <hr class="my-4">
+                <div>
+                    <small class="text-muted">ModuForm에 처음이세요?</small>
+                    <span><a th:text="#{button.view.user.register}" href="/users/register">회원가입하기</a></span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</main>
+<th:block th:replace="~{layout/footer :: common_footer}"/>
+<script src="/js/login.js"></script>
+</body>
+</html>
